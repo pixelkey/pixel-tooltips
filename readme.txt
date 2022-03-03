@@ -8,8 +8,8 @@ Requires at least:
 Tested up to: 
 Requires PHP: 
 Stable tag: 1.0.0
-License: GPLv2
-License URI: https://www.gnu.org/licenses/gpl-2.0.html
+License: GPLv3 or later
+License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
 Customisable tooltips for any occasion
 

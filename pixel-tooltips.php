@@ -4,7 +4,7 @@
  *
  * @package       PIXELTOOLTIP
  * @author        Pixel Key
- * @license       gplv2
+ * @license       gplv3-or-later
  * @version       1.0.0
  *
  * @wordpress-plugin
@@ -16,11 +16,11 @@
  * Author URI:    https://pixelkey.com
  * Text Domain:   pixel-tooltips
  * Domain Path:   /languages
- * License:       GPLv2
- * License URI:   https://www.gnu.org/licenses/gpl-2.0.html
+ * License:       GPLv3 or later
+ * License URI:   https://www.gnu.org/licenses/gpl-3.0.html
  *
  * You should have received a copy of the GNU General Public License
- * along with pixel-tooltips. If not, see <https://www.gnu.org/licenses/gpl-2.0.html/>.
+ * along with pixel-tooltips. If not, see <https://www.gnu.org/licenses/gpl-3.0.html/>.
  */
 
 // Exit if accessed directly.
