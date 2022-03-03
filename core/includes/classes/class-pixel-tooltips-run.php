@@ -75,15 +75,10 @@ class Pixel_Tooltips_Run
 
 		add_action('plugin_action_links_' . PIXELTOOLTIP_PLUGIN_BASE, array($this, 'add_plugin_action_link'), 20);
 
-		if (!shortcode_exists('pixel_tooltip')) {
-			add_shortcode('pixel_tooltip', array($this, 'add_pixel_tooltip_shortcode_callback'));
-		}
-
 		// Check if shortcode is already registered for [tooltip] shortcode
 		if (!shortcode_exists('tooltip')) {
 			add_shortcode('tooltip', array($this, 'add_pixel_tooltip_shortcode_callback'));
 		}
-
 
 		add_shortcode('pixel_tooltips_list', array($this, 'add_pixel_tooltip_list_shortcode_callback'));
 
@@ -387,8 +382,10 @@ class Pixel_Tooltips_Run
 		if ($column_name == 'shortcode') {
 			// Get title of glossary term
 			$title = get_the_title($post_id);
+			$value = '[tooltip]' . $title . '[/tooltip]';
+
 			echo '<div class="glossary-shortcode-container" style = "display: flex;">';
-			echo '<input type="text" onfocus="this.select();" readonly="readonly" value="[pixel_tooltip]' . $title . '[/pixel_tooltip]" class="large-text code">';
+			echo '<input type="text" onfocus="this.select();" readonly="readonly" value="' . $value . '" class="large-text code">';
 			// Copy to clipboard
 			echo '<button class="button button-primary" onclick="event.preventDefault();this.previousElementSibling.select();document.execCommand(\'copy\');">Copy to Clipboard</button>';
 			echo '</div>';
