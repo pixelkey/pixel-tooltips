@@ -1,0 +1,18 @@
+{
+  "name": "pixel-tooltips",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "front-end-scss": "sass core/includes/assets/scss/frontend/main.scss --watch core/includes/assets/css/frontend-styles.css --style compressed --",
+    "back-end-scss": "sass core/includes/assets/scss/backend/main.scss --watch core/includes/assets/css/backend-styles.css --style compressed --",
+    "compile": "concurrently \"npm run front-end-scss\" \"npm run back-end-scss\" "
+  },
+  "keywords": [],
+  "author": "Andrew Greirson - Pixel Key",
+  "license": "MIT",
+  "devDependencies": {
+    "concurrently": "^7.0.0",
+    "nodemon": "^2.0.4",
+    "sass": "^1.30.0"
+  }
+}
