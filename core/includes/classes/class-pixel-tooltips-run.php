@@ -80,10 +80,14 @@ class Pixel_Tooltips_Run
 			add_shortcode('tooltip', array($this, 'add_pixel_tooltip_shortcode_callback'));
 		}
 
-		add_shortcode('glossary', array($this, 'add_pixel_tooltip_list_shortcode_callback'));
-		add_shortcode('tooltips', array($this, 'add_pixel_tooltip_list_shortcode_callback'));
-
-
+		if (!shortcode_exists('glossary')) {
+			add_shortcode('glossary', array($this, 'add_pixel_tooltip_list_shortcode_callback'));
+		}
+		
+		if (!shortcode_exists('tooltips')) {
+			add_shortcode('tooltips', array($this, 'add_pixel_tooltip_list_shortcode_callback'));
+		}
+		
 		add_action('admin_enqueue_scripts', array($this, 'enqueue_backend_scripts_and_styles'), 20);
 		add_action('wp_enqueue_scripts', array($this, 'enqueue_frontend_scripts_and_styles'), 20);
 		add_action('init', array($this, 'add_custom_post_type'), 20);
