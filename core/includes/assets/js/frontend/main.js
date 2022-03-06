@@ -15,8 +15,8 @@ pixelTooltipFollow = (el) => {
     tooltipContent.style.top = cursorY + 'px';
 
     // update tooltip position when mouse moves
-    document.addEventListener('mousemove', () => {
-        tooltipContent.style.left = event.clientX + 'px';
-        tooltipContent.style.top = event.clientY + 'px';
-    });
+    // document.addEventListener('mousemove', () => {
+    //     tooltipContent.style.left = event.clientX + 'px';
+    //     tooltipContent.style.top = event.clientY + 'px';
+    // });
 };

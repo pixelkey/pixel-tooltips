@@ -80,7 +80,8 @@ class Pixel_Tooltips_Run
 			add_shortcode('tooltip', array($this, 'add_pixel_tooltip_shortcode_callback'));
 		}
 
-		add_shortcode('pixel_tooltips_list', array($this, 'add_pixel_tooltip_list_shortcode_callback'));
+		add_shortcode('glossary', array($this, 'add_pixel_tooltip_list_shortcode_callback'));
+		add_shortcode('tooltips', array($this, 'add_pixel_tooltip_list_shortcode_callback'));
 
 
 		add_action('admin_enqueue_scripts', array($this, 'enqueue_backend_scripts_and_styles'), 20);
@@ -381,11 +382,11 @@ class Pixel_Tooltips_Run
 	public function pixel_tooltip_add_shortcode_column_content($column_name, $post_id)
 	{
 		if ($column_name == 'shortcode') {
-			// Get title of glossary term
+			// Get title of tooltip
 			$title = get_the_title($post_id);
 			$value = '[tooltip]' . $title . '[/tooltip]';
 
-			echo '<div class="glossary-shortcode-container" style = "display: flex;">';
+			echo '<div class="tooltip-shortcode-container" style = "display: flex;">';
 			echo '<input type="text" onfocus="this.select();" readonly="readonly" value="' . $value . '" class="large-text code">';
 			// Copy to clipboard
 			echo '<button class="button button-primary" onclick="event.preventDefault();this.previousElementSibling.select();document.execCommand(\'copy\');">Copy to Clipboard</button>';
@@ -393,10 +394,10 @@ class Pixel_Tooltips_Run
 			// Change "Copy to Clipboard" to "Copied!" after click
 			echo '<script>
 					jQuery(document).ready(function($) {
-						$(".glossary-shortcode-container button").click(function() {
+						$(".tooltip-shortcode-container button").click(function() {
 							$(this).text("Copied!");
 							setTimeout(function() {
-								$(".glossary-shortcode-container button").text("Copy to Clipboard");
+								$(".tooltip-shortcode-container button").text("Copy to Clipboard");
 							}, 2000);
 						});
 					});
@@ -446,7 +447,7 @@ class Pixel_Tooltips_Run
 		$output = '<div class ="pixel-tooltip-list-container">';
 		$output .= '<ul class ="pixel-tooltip-list">';
 		foreach ($posts as $post) {
-			$output .= '<li><a href="' . get_edit_post_link($post->ID) . '">' . $post->post_title . '</a></li>';
+			$output .= '<li><a href="' . get_permalink($post->ID) . '">' . $post->post_title . '</a></li>';
 		}
 		$output .= '</ul>';
 		$output .= '</div>';
