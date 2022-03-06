@@ -1,5 +1,5 @@
 // Language: Native javascript ES6
-// Path: core\includes\assets\js\frontend-scripts.js
+// Front end main js file
 
 pixelTooltipFollow = (el) => {
 
@@ -19,5 +19,4 @@ pixelTooltipFollow = (el) => {
         tooltipContent.style.left = event.clientX + 'px';
         tooltipContent.style.top = event.clientY + 'px';
     });
-
 };

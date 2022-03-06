@@ -115,8 +115,8 @@ class Pixel_Tooltips_Run
 	 */
 	public function add_plugin_action_link($links)
 	{
-
-		$links['our_shop'] = sprintf('<a href="%s" title="Custom Link" style="font-weight:700;">%s</a>', 'https://test.test', __('Custom Link', 'pixel-tooltips'));
+		// get wp-admin home
+		$links['our_shop'] = sprintf('<a href="%s" title="Settings" style="font-weight:700;">%s</a>', admin_url() . 'edit.php?post_type=pixel_tooltip', __('Settings', 'pixel-tooltips'));
 
 		return $links;
 	}
@@ -180,7 +180,7 @@ class Pixel_Tooltips_Run
 
 			// Add the tooltip script if not already added
 			if (!wp_script_is('pixeltooltip-frontend-scripts', 'enqueued')) {
-				wp_enqueue_script('pixeltooltip-frontend-scripts', PIXELTOOLTIP_PLUGIN_URL . 'core/includes/assets/js/pixel-tooltip-frontend-scripts.js', array(), PIXELTOOLTIP_VERSION, true);
+				wp_enqueue_script('pixeltooltip-frontend-scripts', PIXELTOOLTIP_PLUGIN_URL . 'core/includes/public/js/pixeltooltip-frontend.min.js', array(), PIXELTOOLTIP_VERSION, true);
 			}
 
 			// run shortcode parser recursively
@@ -206,7 +206,8 @@ class Pixel_Tooltips_Run
 	 */
 	public function enqueue_backend_scripts_and_styles()
 	{
-		wp_enqueue_style('pixeltooltip-backend-styles', PIXELTOOLTIP_PLUGIN_URL . 'core/includes/assets/css/backend-styles.css', array(), PIXELTOOLTIP_VERSION, 'all');
+		wp_enqueue_style('pixeltooltip-backend-styles', PIXELTOOLTIP_PLUGIN_URL . 'core/includes/public/css/pixeltooltip-backend.css', array(), PIXELTOOLTIP_VERSION, 'all');
+		wp_enqueue_script('pixeltooltip-backend-scripts', PIXELTOOLTIP_PLUGIN_URL . 'core/includes/public/js/pixeltooltip-backend.min.js', array(), PIXELTOOLTIP_VERSION, true);
 	}
 
 
@@ -220,7 +221,7 @@ class Pixel_Tooltips_Run
 	 */
 	public function enqueue_frontend_scripts_and_styles()
 	{
-		wp_enqueue_style('pixeltooltip-frontend-styles', PIXELTOOLTIP_PLUGIN_URL . 'core/includes/assets/css/frontend-styles.css', array(), PIXELTOOLTIP_VERSION, 'all');
+		wp_enqueue_style('pixeltooltip-frontend-styles', PIXELTOOLTIP_PLUGIN_URL . 'core/includes/public/css/pixeltooltip-frontend.css', array(), PIXELTOOLTIP_VERSION, 'all');
 	}
 
 	/**

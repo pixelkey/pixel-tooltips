@@ -3,16 +3,23 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "front-end-scss": "sass core/includes/assets/scss/frontend/main.scss --watch core/includes/assets/css/frontend-styles.css --style compressed --",
-    "back-end-scss": "sass core/includes/assets/scss/backend/main.scss --watch core/includes/assets/css/backend-styles.css --style compressed --",
-    "compile": "concurrently \"npm run front-end-scss\" \"npm run back-end-scss\" "
+    "frontend-scss": "sass core/includes/assets/scss/frontend/main.scss --watch core/includes/public/css/pixeltooltip-frontend.css --style compressed --",
+    "backend-scss": "sass core/includes/assets/scss/backend/main.scss --watch core/includes/public/css/pixeltooltip-backend.css --style compressed --",
+    "frontend-js": "browserify core/includes/assets/js/frontend/main.js -o core/includes/public/js/pixeltooltip-frontend.min.js -p tinyify",
+    "backend-js": "browserify core/includes/assets/js/backend/main.js -o core/includes/public/js/pixeltooltip-backend.min.js -p tinyify",
+    "watchify-frontend-js": "watchify core/includes/assets/js/frontend/main.js -o core/includes/public/js/pixeltooltip-frontend.min.js -p tinyify",
+    "watchify-backend-js": "watchify core/includes/assets/js/backend/main.js -o core/includes/public/js/pixeltooltip-backend.min.js -p tinyify",
+    "compile": "concurrently \"npm run frontend-scss\" \"npm run backend-scss\" \"npm run frontend-js\" \"npm run backend-js\" \"npm run watchify-frontend-js\" \"npm run watchify-backend-js\""
   },
   "keywords": [],
   "author": "Andrew Greirson - Pixel Key",
   "license": "MIT",
   "devDependencies": {
+    "browserify": "^17.0.0",
     "concurrently": "^7.0.0",
     "nodemon": "^2.0.4",
-    "sass": "^1.30.0"
+    "sass": "^1.30.0",
+    "tinyify": "^3.0.0",
+    "watchify": "^4.0.0"
   }
 }
