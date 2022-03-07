@@ -475,7 +475,7 @@ class Pixel_Tooltips_Run
 			$output .= '</span>';
 
 			$output .= '<span class = "pixel-tooltip-content">';
-			$output .= get_the_content($post->ID);
+			$output .= get_the_content(null, false, $post);
 			$output .= '</span>';
 			$output .= '</span>';
 			$output .= '</li>';
