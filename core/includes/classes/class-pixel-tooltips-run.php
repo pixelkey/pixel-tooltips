@@ -287,7 +287,7 @@ class Pixel_Tooltips_Run
 			'show_ui'				=> true,
 			'show_in_menu'			=> true,
 			'query_var'				=> true,
-			'rewrite'				=> array('slug' => 'pixel_tooltip'),
+			'rewrite'				=> array('slug' => 'tooltip'),
 			'capability_type'		=> 'post',
 			'has_archive'			=> true,
 			'hierarchical'			=> false,
