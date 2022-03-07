@@ -466,6 +466,7 @@ class Pixel_Tooltips_Run
 		$output = '<div class ="pixel-tooltip-list-container">';
 		$output .= '<ul class ="pixel-tooltip-list">';
 		foreach ($posts as $post) {
+			
 			$output .= '<li>';
 			$output .= '<span class = "pixel-tooltip-container" onmouseover="pixelTooltipFollow(this)">';
 			$output .= '<span class ="pixel-tooltip-term" data-toggle="pixel-tooltip" data-tooltip-id="' . $post->ID . '">';
@@ -475,13 +476,25 @@ class Pixel_Tooltips_Run
 			$output .= '</span>';
 
 			$output .= '<span class = "pixel-tooltip-content">';
-			$output .= get_the_content(null, false, $post);
+			
+			// Get the content of the post
+			$content = get_post_field('post_content', $post->ID);
+
+			// include shortcodes in the content
+			$content = do_shortcode($content);
+			
+			$content = apply_filters('the_content', $content);
+			$output .= $content;
 			$output .= '</span>';
 			$output .= '</span>';
 			$output .= '</li>';
+			
 		}
 		$output .= '</ul>';
 		$output .= '</div>';
+		
+		// Reset post data
+		wp_reset_postdata();
 
 		// Add the tooltip script if not already added
 		if (!wp_script_is('pixeltooltip-frontend-scripts', 'enqueued')) {
