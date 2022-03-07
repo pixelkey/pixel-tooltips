@@ -83,11 +83,11 @@ class Pixel_Tooltips_Run
 		if (!shortcode_exists('glossary')) {
 			add_shortcode('glossary', array($this, 'add_pixel_tooltip_list_shortcode_callback'));
 		}
-		
+
 		if (!shortcode_exists('tooltips')) {
 			add_shortcode('tooltips', array($this, 'add_pixel_tooltip_list_shortcode_callback'));
 		}
-		
+
 		add_action('admin_enqueue_scripts', array($this, 'enqueue_backend_scripts_and_styles'), 20);
 		add_action('wp_enqueue_scripts', array($this, 'enqueue_frontend_scripts_and_styles'), 20);
 		add_action('init', array($this, 'add_custom_post_type'), 20);
@@ -126,77 +126,7 @@ class Pixel_Tooltips_Run
 		return $links;
 	}
 
-	/**
-	 * Add the shortcode callback for [pixel_tooltip]
-	 *
-	 * @access	public
-	 * @since	1.0.0
-	 *
-	 * @param	array	$attr		Additional attributes you have added within the shortcode tag.
-	 * @param	string	$content	The content you added between an opening and closing shortcode tag.
-	 *
-	 * @return	string	The customized content by the shortcode.
-	 */
-	public function add_pixel_tooltip_shortcode_callback($attr = array(), $content = '')
-	{
-		// do something to $content
 
-		$tooltip = '';
-		$result = '';
-		$has_result = false;
-
-		$args = array(
-			'post_type'      => 'pixel_tooltip',
-			'posts_per_page' => -1,
-		);
-		$loop = new WP_Query($args);
-
-		while ($loop->have_posts()) {
-			$loop->the_post();
-
-			$term = get_the_title();
-			$termId = get_the_ID();
-
-
-			$term_found = stripos($content, $term);
-
-			if ($term_found !== false) {
-
-				$tooltip .= '<span class = "pixel-tooltip-container" onmouseover="pixelTooltipFollow(this)">';
-				$tooltip .= '<span class ="pixel-tooltip-term" data-toggle="pixel-tooltip" data-tooltip-id="' . $termId . '">';
-				$tooltip .= '<a href = "' . get_permalink() . '">';
-				$tooltip .= $term;
-				$tooltip .= '</a>';
-				$tooltip .= '</span>';
-
-				$tooltip .= '<span class = "pixel-tooltip-content">';
-				$tooltip .= get_the_content();
-				$tooltip .= '</span>';
-				$tooltip .= '</span>';
-
-				$result = str_ireplace($term, $tooltip, $content);
-				$has_result = true;
-			}
-		}
-
-		wp_reset_postdata();
-
-		if ($has_result === true) {
-
-			// Add the tooltip script if not already added
-			if (!wp_script_is('pixeltooltip-frontend-scripts', 'enqueued')) {
-				wp_enqueue_script('pixeltooltip-frontend-scripts', PIXELTOOLTIP_PLUGIN_URL . 'core/includes/public/js/pixeltooltip-frontend.min.js', array(), PIXELTOOLTIP_VERSION, true);
-			}
-
-			// run shortcode parser recursively
-			$result = do_shortcode($result);
-			return $result;
-		} else {
-			// run shortcode parser recursively
-			$content = do_shortcode($content);
-			return $content;
-		}
-	}
 
 
 
@@ -438,6 +368,91 @@ class Pixel_Tooltips_Run
 
 
 
+
+	/**
+	 * Add the shortcode callback for [pixel_tooltip]
+	 *
+	 * @access	public
+	 * @since	1.0.0
+	 *
+	 * @param	array	$attr		Additional attributes you have added within the shortcode tag.
+	 * @param	string	$content	The content you added between an opening and closing shortcode tag.
+	 *
+	 * @return	string	The customized content by the shortcode.
+	 */
+	public function add_pixel_tooltip_shortcode_callback($attr = array(), $content = '')
+	{
+		// do something to $content
+
+		$tooltip = '';
+		$result = '';
+		$has_result = false;
+
+		$args = array(
+			'post_type'      => 'pixel_tooltip',
+			'posts_per_page' => -1,
+		);
+		$loop = new WP_Query($args);
+
+		while ($loop->have_posts()) {
+			$loop->the_post();
+
+			$term = get_the_title();
+			$termId = get_the_ID();
+
+
+			$term_found = stripos($content, $term);
+
+			if ($term_found !== false) {
+
+				$tooltip .= '<span class = "pixel-tooltip-container" onmouseover="pixelTooltipFollow(this)">';
+				$tooltip .= '<span class ="pixel-tooltip-term" data-toggle="pixel-tooltip" data-tooltip-id="' . $termId . '">';
+				$tooltip .= '<a href = "' . get_permalink() . '">';
+				$tooltip .= $term;
+				$tooltip .= '</a>';
+				$tooltip .= '</span>';
+
+				$tooltip .= '<span class = "pixel-tooltip-content">';
+				$tooltip .= get_the_content();
+				$tooltip .= '</span>';
+				$tooltip .= '</span>';
+
+				$result = str_ireplace($term, $tooltip, $content);
+				$has_result = true;
+			}
+		}
+
+		wp_reset_postdata();
+
+		if ($has_result === true) {
+
+			// Add the tooltip script if not already added
+			if (!wp_script_is('pixeltooltip-frontend-scripts', 'enqueued')) {
+				wp_enqueue_script('pixeltooltip-frontend-scripts', PIXELTOOLTIP_PLUGIN_URL . 'core/includes/public/js/pixeltooltip-frontend.min.js', array(), PIXELTOOLTIP_VERSION, true);
+			}
+
+			// run shortcode parser recursively
+			$result = do_shortcode($result);
+			return $result;
+		} else {
+			// run shortcode parser recursively
+			$content = do_shortcode($content);
+			return $content;
+		}
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
 	public function add_pixel_tooltip_list_shortcode_callback()
 	{
 		$args = array(
@@ -451,10 +466,28 @@ class Pixel_Tooltips_Run
 		$output = '<div class ="pixel-tooltip-list-container">';
 		$output .= '<ul class ="pixel-tooltip-list">';
 		foreach ($posts as $post) {
-			$output .= '<li><a href="' . get_permalink($post->ID) . '">' . $post->post_title . '</a></li>';
+			$output .= '<li>';
+			$output .= '<span class = "pixel-tooltip-container" onmouseover="pixelTooltipFollow(this)">';
+			$output .= '<span class ="pixel-tooltip-term" data-toggle="pixel-tooltip" data-tooltip-id="' . $post->ID . '">';
+			$output .= '<a href = "' . get_permalink($post->ID) . '">';
+			$output .= $post->post_title;
+			$output .= '</a>';
+			$output .= '</span>';
+
+			$output .= '<span class = "pixel-tooltip-content">';
+			$output .= get_the_content($post->ID);
+			$output .= '</span>';
+			$output .= '</span>';
+			$output .= '</li>';
 		}
 		$output .= '</ul>';
 		$output .= '</div>';
+
+		// Add the tooltip script if not already added
+		if (!wp_script_is('pixeltooltip-frontend-scripts', 'enqueued')) {
+			wp_enqueue_script('pixeltooltip-frontend-scripts', PIXELTOOLTIP_PLUGIN_URL . 'core/includes/public/js/pixeltooltip-frontend.min.js', array(), PIXELTOOLTIP_VERSION, true);
+		}
+
 		return $output;
 	}
 
