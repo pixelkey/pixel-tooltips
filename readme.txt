@@ -4,9 +4,9 @@ Plugin URI: https://pixelkey.com
 Donate link: 
 Contributors: Andrew Greirson
 Tags: WordPress, tooltips
-Requires at least: 
-Tested up to: 
-Requires PHP: 
+Requires at least: 4.9
+Tested up to: 5.8.3
+Requires PHP: 7.2
 Stable tag: 1.0.0
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
