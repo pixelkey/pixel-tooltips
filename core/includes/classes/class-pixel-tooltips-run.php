@@ -413,7 +413,16 @@ class Pixel_Tooltips_Run
 				$tooltip .= '</span>';
 
 				$tooltip .= '<span class = "pixel-tooltip-content">';
-				$tooltip .= get_the_content();
+
+				$tooltip_content = get_the_content();
+
+				// If tooltip content contains embedded media, process embdeded media (images, videos, etc) in the tooltip content
+				if (strpos($tooltip_content, '[embed') !== false || strpos($tooltip_content, '[video') !== false || strpos($tooltip_content, '[gallery') !== false || strpos($tooltip_content, '[audio') !== false || strpos($tooltip_content, '[playlist') !== false || strpos($tooltip_content, '[caption') !== false) {
+					$tooltip_content = apply_filters('the_content', $tooltip_content);
+				}
+
+				$tooltip .= $tooltip_content;
+
 				$tooltip .= '</span>';
 				$tooltip .= '</span>';
 
@@ -466,7 +475,7 @@ class Pixel_Tooltips_Run
 		$output = '<div class ="pixel-tooltip-list-container">';
 		$output .= '<ul class ="pixel-tooltip-list">';
 		foreach ($posts as $post) {
-			
+
 			$output .= '<li>';
 			$output .= '<span class = "pixel-tooltip-container" onmouseover="pixelTooltipFollow(this)">';
 			$output .= '<span class ="pixel-tooltip-term" data-toggle="pixel-tooltip" data-tooltip-id="' . $post->ID . '">';
@@ -476,23 +485,22 @@ class Pixel_Tooltips_Run
 			$output .= '</span>';
 
 			$output .= '<span class = "pixel-tooltip-content">';
-			
-			// Get the content of the post
-			$content = get_post_field('post_content', $post->ID);
 
-			// include shortcodes in the content
-			$content = do_shortcode($content);
-			
-			$content = apply_filters('the_content', $content);
-			$output .= $content;
+			$tooltip_content = get_the_content(null, false, $post->ID);
+
+			// If tooltip content contains embedded media, process embdeded media (images, videos, etc) in the tooltip content
+			if (strpos($tooltip_content, '[embed') !== false || strpos($tooltip_content, '[video') !== false || strpos($tooltip_content, '[gallery') !== false || strpos($tooltip_content, '[audio') !== false || strpos($tooltip_content, '[playlist') !== false || strpos($tooltip_content, '[caption') !== false) {
+				$tooltip_content = apply_filters('the_content', $tooltip_content);
+			}
+
+			$output .= $tooltip_content;
 			$output .= '</span>';
 			$output .= '</span>';
 			$output .= '</li>';
-			
 		}
 		$output .= '</ul>';
 		$output .= '</div>';
-		
+
 		// Reset post data
 		wp_reset_postdata();
 
