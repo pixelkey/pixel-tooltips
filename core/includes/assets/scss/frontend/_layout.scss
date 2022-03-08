@@ -20,8 +20,8 @@
     opacity   : 0;
     position  : fixed;
     display   : block;
-    max-height: 400px;
-    max-width : 400px;
+    max-height: $max-height;
+    max-width : $max-width;
     overflow-y: scroll;
     transition: all 0.3s ease-in-out;
 
@@ -37,15 +37,6 @@
 
     img {
         height   : auto;
-        max-width: inherit;
-    }
-
-    iframe {
-        max-width : inherit;
-        max-height: inherit;
-    }
-
-    p {
         max-width: inherit;
     }
 
