@@ -93,7 +93,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         pixelTooltipContent.addEventListener('mouseleave', () => {
             pixelTooltipClose(pixelTooltipContent);
-            pixelTooltipResetPosition(pixelTooltipContent);
+            // pixelTooltipResetPosition(pixelTooltipContent);
         });
 
     });
