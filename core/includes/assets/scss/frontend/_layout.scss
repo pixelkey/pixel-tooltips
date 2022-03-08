@@ -15,13 +15,13 @@
 
 .pixel-tooltip-content {
 
-    display: none;
+    display   : none;
     visibility: hidden;
     opacity   : 0;
     position  : fixed;
     display   : block;
     max-height: 400px;
-    max-width : 600px;
+    max-width : 400px;
     overflow-y: scroll;
     transition: all 0.3s ease-in-out;
 
@@ -37,16 +37,16 @@
 
     img {
         height   : auto;
-        max-width: 400px;
+        max-width: inherit;
     }
 
     iframe {
-        max-width : 400px;
-        max-height: 400px;
+        max-width : inherit;
+        max-height: inherit;
     }
 
     p {
-        max-width: 400px;
+        max-width: inherit;
     }
 
     &::-webkit-scrollbar {
