@@ -392,46 +392,40 @@ class Pixel_Tooltips_Run
 			'post_type'      => 'pixel_tooltip',
 			'posts_per_page' => -1,
 		);
-		$loop = new WP_Query($args);
 
-		while ($loop->have_posts()) {
-			$loop->the_post();
-
-			$term = get_the_title();
-			$termId = get_the_ID();
+		$query = new WP_Query($args);
+		$posts = $query->posts;
+		$tooltip_content = '';
 
 
+		foreach ($posts as $post) {
+
+			$term = get_the_title($post->ID);
 			$term_found = stripos($content, $term);
 
 			if ($term_found !== false) {
 
-				$tooltip .= '<span class = "pixel-tooltip-container" onmouseover="pixelTooltipFollow(this)">';
-				$tooltip .= '<span class ="pixel-tooltip-term" data-toggle="pixel-tooltip" data-tooltip-id="' . $termId . '">';
-				$tooltip .= '<a href = "' . get_permalink() . '">';
+				$tooltip .= '<span class ="pixel-tooltip-term" data-toggle="pixel-tooltip" data-tooltip-id="' . $post->ID . '" onmouseover="pixelTooltipFollow(this)">';
+				$tooltip .= '<a href = "' . get_permalink($post->ID) . '">';
 				$tooltip .= $term;
 				$tooltip .= '</a>';
 				$tooltip .= '</span>';
 
-				$tooltip .= '<span class = "pixel-tooltip-content">';
-
-				$tooltip_content = get_the_content();
-
-				// If tooltip content contains embedded media, process embdeded media (images, videos, etc) in the tooltip content
-				if (strpos($tooltip_content, '[embed') !== false || strpos($tooltip_content, '[video') !== false || strpos($tooltip_content, '[gallery') !== false || strpos($tooltip_content, '[audio') !== false || strpos($tooltip_content, '[playlist') !== false || strpos($tooltip_content, '[caption') !== false) {
-					$tooltip_content = apply_filters('the_content', $tooltip_content);
-				}
-
-				$tooltip .= $tooltip_content;
-
-				$tooltip .= '</span>';
-				$tooltip .= '</span>';
+				$tooltip_content .= '<div class = "pixel-tooltip-content" id="tooltip-id-' . $post->ID . '">';
+				$tooltip_content .= apply_filters('the_content', get_the_content(null, false, $post->ID));
+				$tooltip_content .= '</div>';
 
 				$result = str_ireplace($term, $tooltip, $content);
 				$has_result = true;
 			}
 		}
 
-		wp_reset_postdata();
+		// echo $tooltip_content at the end of the page
+		if ($has_result) {
+			add_action('wp_footer', function() use ($tooltip_content) {
+				echo $tooltip_content;
+			});
+		}
 
 		if ($has_result === true) {
 
@@ -470,39 +464,48 @@ class Pixel_Tooltips_Run
 			'orderby' => 'title',
 			'order' => 'ASC',
 		);
+
+		$tooltip_content = '';
 		$query = new WP_Query($args);
 		$posts = $query->posts;
 		$output = '<div class ="pixel-tooltip-list-container">';
 		$output .= '<ul class ="pixel-tooltip-list">';
 		foreach ($posts as $post) {
 
-			$output .= '<li>';
-			$output .= '<span class = "pixel-tooltip-container" onmouseover="pixelTooltipFollow(this)">';
-			$output .= '<span class ="pixel-tooltip-term" data-toggle="pixel-tooltip" data-tooltip-id="' . $post->ID . '">';
-			$output .= '<a href = "' . get_permalink($post->ID) . '">';
-			$output .= $post->post_title;
-			$output .= '</a>';
-			$output .= '</span>';
+			$term = get_the_title($post->ID);
 
-			$output .= '<span class = "pixel-tooltip-content">';
+			if ($term !== false) {
+				$output .= '<li>';
+				$output .= '<span class ="pixel-tooltip-term" data-toggle="pixel-tooltip" data-tooltip-id="' . $post->ID . '" onmouseover="pixelTooltipFollow(this)">';
+				$output .= '<a href = "' . get_permalink($post->ID) . '">';
+				$output .= $term;
+				$output .= '</a>';
+				$output .= '</span>';
+				$output .= '</li>';
 
-			$tooltip_content = get_the_content(null, false, $post->ID);
+				$tooltip_content .= '<div class = "pixel-tooltip-content" id="tooltip-id-' . $post->ID . '">';
+				$tooltip_content .= apply_filters('the_content', get_the_content(null, false, $post->ID));
+				$tooltip_content .= '</div>';
 
-			// If tooltip content contains embedded media, process embdeded media (images, videos, etc) in the tooltip content
-			if (strpos($tooltip_content, '[embed') !== false || strpos($tooltip_content, '[video') !== false || strpos($tooltip_content, '[gallery') !== false || strpos($tooltip_content, '[audio') !== false || strpos($tooltip_content, '[playlist') !== false || strpos($tooltip_content, '[caption') !== false) {
-				$tooltip_content = apply_filters('the_content', $tooltip_content);
+				$has_result = true;
 			}
-
-			$output .= $tooltip_content;
-			$output .= '</span>';
-			$output .= '</span>';
-			$output .= '</li>';
 		}
 		$output .= '</ul>';
 		$output .= '</div>';
 
-		// Reset post data
-		wp_reset_postdata();
+		// echo $tooltip_content at the end of the page
+		if ($has_result) {
+			add_action('wp_footer', function() use ($tooltip_content) {
+
+				// Get content of wp_footer action
+				$footer_content = ob_get_clean();
+				// Add the tooltip content if not already added
+				if (strpos($footer_content, $tooltip_content) === false) {
+					echo $tooltip_content;
+				}
+
+			});
+		}
 
 		// Add the tooltip script if not already added
 		if (!wp_script_is('pixeltooltip-frontend-scripts', 'enqueued')) {
@@ -511,12 +514,6 @@ class Pixel_Tooltips_Run
 
 		return $output;
 	}
-
-
-
-
-
-
 
 
 

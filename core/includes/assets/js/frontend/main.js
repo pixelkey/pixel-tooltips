@@ -6,9 +6,31 @@ pixelTooltipFollow = (el) => {
     // Get location of element
     let elLocation = el.getBoundingClientRect();
 
+    // Get el attribute for data-tooltip-id
+    let tooltipId = el.getAttribute('data-tooltip-id');
+
+    // Get element with attribute tooltip-content-id 
+    let tooltipContent = document.querySelector('#tooltip-id-' + tooltipId);
+
+    // On hover of element toggle class tooltip-active and remove when mouse leaves
+    el.addEventListener('mouseenter', () => {
+        tooltipContent.classList.add('tooltip-active');
+    });
+
+    el.addEventListener('mouseleave', () => {
+        tooltipContent.classList.remove('tooltip-active');
+    });
+
+    tooltipContent.addEventListener('mouseenter', () => {
+        tooltipContent.classList.add('tooltip-active');
+    });
+
+    tooltipContent.addEventListener('mouseleave', () => {
+        tooltipContent.classList.remove('tooltip-active');
+    });
+
 
     // Align this pixel-tooltip-content to the center of the element
-    let tooltipContent = el.querySelector('.pixel-tooltip-content');
     tooltipContent.style.left = `${elLocation.left + (elLocation.width / 2) - (tooltipContent.offsetWidth / 2)}px`;
 
     // If tooltip is below the screen, move it up to above the element
