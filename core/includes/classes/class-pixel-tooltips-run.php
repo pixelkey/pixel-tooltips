@@ -405,7 +405,7 @@ class Pixel_Tooltips_Run
 
 			if ($term_found !== false) {
 
-				$tooltip .= '<span class ="pixel-tooltip-term" data-toggle="pixel-tooltip" data-tooltip-id="' . $post->ID . '" onmouseover="pixelTooltipFollow(this)">';
+				$tooltip .= '<span class ="pixel-tooltip-term" data-toggle="pixel-tooltip" data-tooltip-id="' . $post->ID . '" >';
 				$tooltip .= '<a href = "' . get_permalink($post->ID) . '">';
 				$tooltip .= $term;
 				$tooltip .= '</a>';
@@ -476,7 +476,7 @@ class Pixel_Tooltips_Run
 
 			if ($term !== false) {
 				$output .= '<li>';
-				$output .= '<span class ="pixel-tooltip-term" data-toggle="pixel-tooltip" data-tooltip-id="' . $post->ID . '" onmouseover="pixelTooltipFollow(this)">';
+				$output .= '<span class ="pixel-tooltip-term" data-toggle="pixel-tooltip" data-tooltip-id="' . $post->ID . '" >';
 				$output .= '<a href = "' . get_permalink($post->ID) . '">';
 				$output .= $term;
 				$output .= '</a>';
