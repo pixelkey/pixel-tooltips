@@ -97,7 +97,9 @@ class Pixel_Tooltips_Run
 		add_filter('manage_pixel_tooltip_posts_columns', array($this, 'pixel_tooltip_add_shortcode_column'));
 		add_filter('manage_pixel_tooltip_posts_columns', array($this, 'pixel_tooltip_move_shortcode_column'));
 		add_action('manage_pixel_tooltip_posts_custom_column', array($this, 'pixel_tooltip_add_shortcode_column_content'), 10, 2);
-		// add_action('parse_query', 'pixel_tooltip_no_nopaging');
+
+		// Add filter to post content and then automatically add tooltips to the content if the user has enabled it
+		add_filter('the_content', array($this, 'auto_add_tooltips_to_content'), 10);
 	}
 
 	/**
@@ -267,22 +269,6 @@ class Pixel_Tooltips_Run
 
 
 
-	/**
-	 * No Pagination for Pixel Tooltips Archive
-	 *
-	 * @access	public
-	 * @since	1.0.0
-	 *
-	 * @return	void
-	 */
-	function pixel_tooltip_no_nopaging($query)
-	{
-		if (is_post_type_archive('pixel_tooltip')) {
-			$query->set('nopaging', 1);
-			$query->set('orderby', 'title');
-			$query->set('order', 'ASC');
-		}
-	}
 
 
 	/**
@@ -422,7 +408,7 @@ class Pixel_Tooltips_Run
 
 		// echo $tooltip_content at the end of the page
 		if ($has_result) {
-			add_action('wp_footer', function() use ($tooltip_content) {
+			add_action('wp_footer', function () use ($tooltip_content) {
 				echo $tooltip_content;
 			});
 		}
@@ -443,13 +429,6 @@ class Pixel_Tooltips_Run
 			return $content;
 		}
 	}
-
-
-
-
-
-
-
 
 
 
@@ -495,7 +474,7 @@ class Pixel_Tooltips_Run
 
 		// echo $tooltip_content at the end of the page
 		if ($has_result) {
-			add_action('wp_footer', function() use ($tooltip_content) {
+			add_action('wp_footer', function () use ($tooltip_content) {
 
 				// Get content of wp_footer action
 				$footer_content = ob_get_clean();
@@ -503,7 +482,6 @@ class Pixel_Tooltips_Run
 				if (strpos($footer_content, $tooltip_content) === false) {
 					echo $tooltip_content;
 				}
-
 			});
 		}
 
@@ -516,6 +494,102 @@ class Pixel_Tooltips_Run
 	}
 
 
+
+	/**
+	 * 	Filter to automatically add the shortcode to the content of the post and page if the shortcode is not already present
+	 *
+	 * @param string $content
+	 *
+	 * @return string $content
+	 */
+	public function auto_add_tooltips_to_content($content)
+	{
+		// Only run once
+		if (is_admin()) {
+			return $content;
+		}
+
+		if (!in_the_loop()) {
+			return $content;
+		}
+
+		if (!is_singular()) {
+			return $content;
+		}
+
+		if (!is_main_query()) {
+			return $content;
+		}
+
+		// Return if it is a single tooltip post
+		if (is_singular('pixel_tooltip')) {
+			return $content;
+		}
+
+		$args = array(
+			'post_type'      => 'pixel_tooltip',
+			'posts_per_page' => -1,
+		);
+
+		$query = new WP_Query($args);
+		$tooltips = $query->posts;
+		$tooltip_content = '';
+
+		foreach ($tooltips as $post) {
+
+			$term = get_the_title($post->ID);
+			$term_found = stripos($content, $term);
+			$tooltip = '';
+
+			$term_is_shortcode = stripos($content, '[tooltip]' . $term . '[/tooltip]');
+
+			if ($term_found !== false && $term_is_shortcode === false) {
+				// Find term in content and wrap term in [tooltip] shortcode
+
+				$tooltip .= '<span class ="pixel-tooltip-term" data-toggle="pixel-tooltip" data-tooltip-id="' . $post->ID . '" >';
+				$tooltip .= '<a href = "' . get_permalink($post->ID) . '">';
+				$tooltip .= $term;
+				$tooltip .= '</a>';
+				$tooltip .= '</span>';
+
+				$tooltip_content_filtered = get_the_content(null, false, $post->ID);
+
+				$tooltip_content .= '<div class = "pixel-tooltip-content" id="tooltip-id-' . $post->ID . '">';
+				$tooltip_content .= $tooltip_content_filtered;
+				$tooltip_content .= '</div>';
+
+
+				$content = str_ireplace($term, $tooltip, $content);
+				$has_result = true;
+			}
+		}
+
+		// echo $tooltip_content at the end of the page
+		if ($has_result === true) {
+			// echo $tooltip_content at the end of the page
+
+			add_action('wp_footer', function () use ($tooltip_content) {
+
+				// Get content of wp_footer action
+				$footer_content = ob_get_clean();
+				// Add the tooltip content if not already added
+				if (strpos($footer_content, $tooltip_content) === false) {
+					// Apply filters to the content
+					$tooltip_content = apply_filters('the_content', $tooltip_content);
+					echo $tooltip_content;
+				}
+			});
+
+			// Add the tooltip script if not already added
+			if (!wp_script_is('pixeltooltip-frontend-scripts', 'enqueued')) {
+				wp_enqueue_script('pixeltooltip-frontend-scripts', PIXELTOOLTIP_PLUGIN_URL . 'core/includes/public/js/pixeltooltip-frontend.min.js', array(), PIXELTOOLTIP_VERSION, true);
+			}
+		}
+
+		remove_filter(current_filter(), __FUNCTION__);
+
+		return $content;
+	}
 
 
 	// End of class
