@@ -540,11 +540,16 @@ class Pixel_Tooltips_Run
 		$tooltips = $query->posts;
 		$tooltip_content = '';
 		$has_result = false;
+		$term_found = false;
 
 		foreach ($tooltips as $post) {
 
 			$term = get_the_title($post->ID);
-			$term_found = stripos($content, $term);
+
+			if (stripos($content, ' ' . $term . ' ') || stripos($content, $term . '.') || stripos($content, $term . '?') || stripos($content, $term . '!') || stripos($content, $term . ',') || stripos($content, $term . ';') || stripos($content, $term . ':')) {
+				$term_found = true;
+			}
+
 			$tooltip = '';
 
 			$term_is_shortcode = stripos($content, '[tooltip]' . $term . '[/tooltip]');
