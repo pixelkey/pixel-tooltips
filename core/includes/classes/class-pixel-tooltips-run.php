@@ -526,6 +526,11 @@ class Pixel_Tooltips_Run
 			return $content;
 		}
 
+		// Return if the shortcode is already present
+		if (strpos($content, '[tooltips]') !== false || strpos($content, '[glossary]') !== false) {
+			return $content;
+		}
+
 		$args = array(
 			'post_type'      => 'pixel_tooltip',
 			'posts_per_page' => -1,
@@ -534,6 +539,7 @@ class Pixel_Tooltips_Run
 		$query = new WP_Query($args);
 		$tooltips = $query->posts;
 		$tooltip_content = '';
+		$has_result = false;
 
 		foreach ($tooltips as $post) {
 
