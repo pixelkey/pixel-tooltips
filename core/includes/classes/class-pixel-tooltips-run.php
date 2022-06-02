@@ -99,7 +99,7 @@ class Pixel_Tooltips_Run
 		add_action('manage_pixel_tooltip_posts_custom_column', array($this, 'pixel_tooltip_add_shortcode_column_content'), 10, 2);
 
 		// Add filter to post content and then automatically add tooltips to the content if the user has enabled it
-		add_filter('the_content', array($this, 'auto_add_tooltips_to_content'), 10);
+		// add_filter('the_content', array($this, 'auto_add_tooltips_to_content'), 10);
 	}
 
 	/**
@@ -219,12 +219,15 @@ class Pixel_Tooltips_Run
 			'show_ui'				=> true,
 			'show_in_menu'			=> true,
 			'query_var'				=> true,
-			'rewrite'				=> array('slug' => 'tooltip'),
+			'rewrite'				=> array('slug' => 'glossary'),
 			'capability_type'		=> 'post',
 			'has_archive'			=> true,
 			'hierarchical'			=> false,
 			'menu_position'			=> null,
 		);
+
+		// force flush rewrite rules
+		flush_rewrite_rules();
 
 		register_post_type('pixel_tooltip', $args);
 	}
