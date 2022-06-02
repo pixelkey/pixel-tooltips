@@ -173,9 +173,9 @@ class Pixel_Tooltips_Run
 	{
 
 		$labels = array(
-			'name'                  => _x('Pixel Tooltips', 'Post type general name', 'pixel-tooltips'),
+			'name'                  => _x('Glossary', 'Post type general name', 'pixel-tooltips'),
 			'singular_name'         => _x('Tooltip', 'Post type singular name', 'pixel-tooltips'),
-			'menu_name'             => _x('Pixel Tooltips', 'Admin Menu text', 'pixel-tooltips'),
+			'menu_name'             => _x('Glossary', 'Admin Menu text', 'pixel-tooltips'),
 			'name_admin_bar'        => _x('Tooltip', 'Add New on Toolbar', 'pixel-tooltips'),
 			'add_new'               => __('Add New', 'pixel-tooltips'),
 			'add_new_item'          => __('Add New Tooltip', 'pixel-tooltips'),
