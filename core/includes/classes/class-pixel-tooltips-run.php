@@ -226,9 +226,6 @@ class Pixel_Tooltips_Run
 			'menu_position'			=> null,
 		);
 
-		// force flush rewrite rules
-		flush_rewrite_rules();
-
 		register_post_type('pixel_tooltip', $args);
 	}
 
